@@ -7,7 +7,7 @@
 #
 class jenkins($server = "nginx") {
 
-  package { "sun-java6-jdk":
+  package { ["openjdk-6-jre", "openjdk-6-jdk"]:
     ensure => installed,
   }
 
