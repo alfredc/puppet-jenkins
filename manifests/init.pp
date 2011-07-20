@@ -52,7 +52,7 @@ class jenkins($server = "nginx") {
       group => root,
       mode => 644,
       ensure => present,
-      content => template("nginx-jenkins.conf.erb"),
+      content => template("jenkins/nginx-jenkins.conf.erb"),
       require => Package["nginx"],
       notify => Service["nginx"],
     }
