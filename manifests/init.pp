@@ -27,7 +27,7 @@ class jenkins($server = "nginx") {
 
   package { "jenkins":
     ensure => installed,
-    require => [ Package["sun-java6-jdk"], Exec["apt-update"] ],
+    require => [ Package["openjdk-6-jre"], Package["openjdk-6-jdk"], Exec["apt-update"] ],
   }
 
   service { "jenkins":
