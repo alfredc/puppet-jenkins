@@ -1,13 +1,12 @@
 # Class: jenkins
 #
 # For installing and managing Jenkins (continuous integration server)
+# Requires apt module from https://github.com/camptocamp/puppet-apt
 # Requires nginx module, or at least nginx.conf must include the line
 #   include /etc/nginx/conf.d/*.conf;
 # at the bottom of the http{} context.
 #
 class jenkins($server = "nginx") {
-
-  include apt
 
   apt::key {"D50582E6":
     source  => "http://pkg.jenkins-ci.org/debian/jenkins-ci.org.key",
