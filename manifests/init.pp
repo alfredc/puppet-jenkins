@@ -11,11 +11,16 @@ class jenkins($server = "nginx") {
   apt::source { "jenkins":
     location => "http://pkg.jenkins-ci.org/debian",
     release => "binary/",
+    repos => "",
     key => "D50582E6",
     key_server => "http://pkg.jenkins-ci.org/debian/jenkins-ci.org.key",
   }
 
-  package { ["openjdk-6-jre", "openjdk-6-jdk"]:
+  package { "openjdk-6-jre":
+    ensure => installed,
+  }
+
+  package { "openjdk-6-jdk":
     ensure => installed,
   }
 
