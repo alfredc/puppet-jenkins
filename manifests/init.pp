@@ -8,14 +8,11 @@
 #
 class jenkins($server = "nginx") {
 
-  apt::key {"D50582E6":
-    source  => "http://pkg.jenkins-ci.org/debian/jenkins-ci.org.key",
-  }
-
-  apt::sources_list {"jenkins":
-    ensure  => present,
-    content => "deb http://pkg.jenkins-ci.org/debian binary/",
-    require => Apt::Key["D50582E6"],
+  apt::source { "jenkins"
+    location => "http://pkg.jenkins-ci.org/debian",
+    release => "binary/",
+    key => "D50582E6",
+    key_server => "http://pkg.jenkins-ci.org/debian/jenkins-ci.org.key",
   }
 
   package { ["openjdk-6-jre", "openjdk-6-jdk"]:
@@ -24,7 +21,7 @@ class jenkins($server = "nginx") {
 
   package {"jenkins":
     ensure  => installed,
-    require => [ Apt::Sources_list["jenkins"], Package["openjdk-6-jre"], Package["openjdk-6-jdk"] ],
+    require => [ Apt::Source["jenkins"], Package["openjdk-6-jre"], Package["openjdk-6-jdk"] ],
   }
 
   service {"jenkins":
