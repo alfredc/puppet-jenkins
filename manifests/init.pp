@@ -1,10 +1,12 @@
 # Class: jenkins
 #
 # For installing and managing Jenkins (continuous integration server)
-# Requires apt module from https://github.com/camptocamp/puppet-apt
-# Requires nginx module, or at least nginx.conf must include the line
-#   include /etc/nginx/conf.d/*.conf;
-# at the bottom of the http{} context.
+# Requires:
+#   - apt module from https://github.com/camptocamp/puppet-apt
+#   - nginx module, or at least nginx.conf must include the line
+#       include /etc/nginx/conf.d/*.conf;
+#     at the bottom of the http{} context.
+#   - java
 #
 class jenkins($server = "nginx") {
 
@@ -16,17 +18,9 @@ class jenkins($server = "nginx") {
     key_server => "http://pkg.jenkins-ci.org/debian/jenkins-ci.org.key",
   }
 
-  package { "openjdk-6-jre":
-    ensure => installed,
-  }
-
-  package { "openjdk-6-jdk":
-    ensure => installed,
-  }
-
   package {"jenkins":
     ensure  => installed,
-    require => [ Apt::Source["jenkins"], Package["openjdk-6-jre"], Package["openjdk-6-jdk"] ],
+    require => [ Apt::Source["jenkins"], Class["java"] ],
   }
 
   service {"jenkins":
