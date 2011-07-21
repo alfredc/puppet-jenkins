@@ -8,7 +8,7 @@
 #
 class jenkins($server = "nginx") {
 
-  apt::source { "jenkins"
+  apt::source { "jenkins":
     location => "http://pkg.jenkins-ci.org/debian",
     release => "binary/",
     key => "D50582E6",
