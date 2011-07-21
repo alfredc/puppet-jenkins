@@ -7,35 +7,34 @@
 #
 class jenkins($server = "nginx") {
 
+  include apt
+
+  apt::key {"D50582E6":
+    source  => "http://pkg.jenkins-ci.org/debian/jenkins-ci.org.key",
+  }
+
+  apt::sources_list {"jenkins":
+    ensure  => present,
+    content => "deb http://pkg.jenkins-ci.org/debian binary/",
+    require => Apt::Key["D50582E6"],
+  }
+
   package { ["openjdk-6-jre", "openjdk-6-jdk"]:
     ensure => installed,
   }
 
-  exec { "jenkins-key":
-    command => "/usr/bin/wget -q -O - http://pkg.jenkins-ci.org/debian/jenkins-ci.org.key | apt-key add -",
+  package {"jenkins":
+    ensure  => installed,
+    require => [ Apt::Sources_list["jenkins"], Package["openjdk-6-jre"], Package["openjdk-6-jdk"] ],
   }
 
-  exec { "jenkins-source":
-    command => "/bin/echo \"deb http://pkg.jenkins-ci.org/debian binary/\" > /etc/apt/sources.list.d/jenkins.list",
-    require => Exec["jenkins-key"],
-  }
-
-  exec { "apt-update":
-    command => "/usr/bin/apt-get update",
-    require => Exec["jenkins-source"],
-  }
-
-  package { "jenkins":
-    ensure => installed,
-    require => [ Package["openjdk-6-jre"], Package["openjdk-6-jdk"], Exec["apt-update"] ],
-  }
-
-  service { "jenkins":
-    ensure => running,
-    enable => true,
+  service {"jenkins":
+    enable  => true,
+    ensure  => running,
+    hasrestart => true,
     require => Package["jenkins"],
   }
-
+  
   if $server == "nginx" {
     #package { "nginx":
     #  ensure => installed,
