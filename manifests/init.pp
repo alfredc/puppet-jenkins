@@ -18,18 +18,18 @@ class jenkins($server = "nginx") {
     key_server => "http://pkg.jenkins-ci.org/debian/jenkins-ci.org.key",
   }
 
-  package {"jenkins":
+  package { "jenkins":
     ensure  => installed,
     require => [ Apt::Source["jenkins"], Class["java"] ],
   }
 
-  service {"jenkins":
+  service { "jenkins":
     enable  => true,
     ensure  => running,
     hasrestart => true,
     require => Package["jenkins"],
   }
-  
+
   if $server == "nginx" {
     #package { "nginx":
     #  ensure => installed,
