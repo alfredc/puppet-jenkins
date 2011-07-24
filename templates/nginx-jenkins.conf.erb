@@ -23,7 +23,7 @@ server {
 
   # This location allows GitHub to submit it's post-commit hook
   # and trigger the server to build
-  location ~/job/(.*)/build {
+  location /github-webhook {
     proxy_pass        http://127.0.0.1:8080;  # http://jenkins/;
   }
 }
