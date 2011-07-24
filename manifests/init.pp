@@ -16,6 +16,7 @@ class jenkins($server = "nginx") {
     repos => "",
     key => "D50582E6",
     key_server => "http://pkg.jenkins-ci.org/debian/jenkins-ci.org.key",
+    include_src => false,
   }
 
   package { "jenkins":
